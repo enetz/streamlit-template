@@ -8,6 +8,8 @@ from src.common import reset_directory
 
 # Specify mzML file location in workspace
 mzML_dir: Path = Path(st.session_state.workspace, "mzML-files")
+fasta_dir: Path = Path(st.session_state.workspace, "fasta-files")
+idXML_dir: Path = Path(st.session_state.workspace, "idXML-files")
 
 
 def add_to_selected_mzML(filename: str):
@@ -51,6 +53,30 @@ def save_uploaded_mzML(uploaded_files: list[bytes]) -> None:
         add_to_selected_mzML(Path(f.name).stem)
     st.success("Successfully added uploaded files!")
 
+@st.cache_data
+def save_uploaded_fasta(uploaded_files: list[bytes]) -> None:
+    """
+    Saves uploaded FASTA files to the FASTA directory.
+
+    Args:
+        uploaded_files (List[bytes]): List of uploaded mzML files.
+
+    Returns:
+        None
+    """
+    # A list of files is required, since online allows only single upload, create a list
+    if st.session_state.location == "online":
+        uploaded_files = [uploaded_files]
+    # If no files are uploaded, exit early
+    if not uploaded_files:
+        st.warning("Upload some files first.")
+        return
+    # Write files from buffer to workspace FASTA directory, add to selected files
+    for f in uploaded_files:
+        if f.name not in [f.name for f in fasta_dir.iterdir()] and f.name.endswith("fasta"):
+            with open(Path(fasta_dir, f.name), "wb") as fh:
+                fh.write(f.getbuffer())
+    st.success("Successfully added uploaded files!")
 
 @st.cache_data
 def copy_local_mzML_files_from_directory(local_mzML_directory: str) -> None:
@@ -90,7 +116,9 @@ def load_example_mzML_files() -> None:
     for f in Path("example-data", "mzML").glob("*.mzML"):
         shutil.copy(f, mzML_dir)
         add_to_selected_mzML(f.stem)
-    st.success("Example mzML files loaded!")
+    for f in Path("example-data", "Fasta").glob("*.fasta"):
+        shutil.copy(f, fasta_dir)
+    st.success("Example files loaded!")
 
 
 def remove_selected_mzML_files(to_remove: list[str]) -> None:
@@ -125,3 +153,36 @@ def remove_all_mzML_files() -> None:
     # reset selected mzML list
     st.session_state["selected-mzML-files"] = []
     st.success("All mzML files removed!")
+    
+def remove_selected_fasta_files(to_remove: list[str]) -> None:
+    """
+    Removes selected FASTA files from the FASTA directory.
+
+    Args:
+        to_remove (List[str]): List of FASTA files to remove.
+
+    Returns:
+        None
+    """
+    # remove all given files from FASTA workspace directory and selected files
+    for f in to_remove:
+        Path(fasta_dir, f+".fasta").unlink()
+        st.session_state["selected-fasta-file"].remove(f)
+    st.success("Selected FASTA file removed!")
+
+
+def remove_all_fasta_files() -> None:
+    """
+    Removes all FASTA files from the FASTA directory.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+    # reset (delete and re-create) FASTA directory in workspace
+    reset_directory(fasta_dir)
+    # reset selected FASTA list
+    st.session_state["selected-fasta-file"] = ""
+    st.success("All FASTA files removed!")

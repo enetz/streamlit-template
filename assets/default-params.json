@@ -1,8 +1,18 @@
 {
     "selected-mzML-files": [],
+	"selected-fasta-file": [],
     "image-format": "svg",
     "2D-map-intensity-cutoff": 5000,
-
-    "example-x-dimension": 10,
-    "example-y-dimension": 5
+	
+	"decoy-string": "DECOY_",
+	"decoy-pos": "prefix",
+	"precursor-tol": 10.0,
+	"fragment-tol": 20.0,
+	"enzyme": "Trypsin",
+	"resA": "K,N-term",
+	"resB": "K,N-term",
+	"xl-mass": 138.06808,
+	"xl-mono-masses": "156.07864431,155.094628715",
+	"xl-name": "DSS"
+	
 }

@@ -44,7 +44,7 @@ RUN python -m pip install -r requirements.txt
 # create workdir and copy over all streamlit related files/folders
 WORKDIR /app
 # note: specifying folder with slash as suffix and repeating the folder name seems important to preserve directory structure
-COPY app.py /app/app.py 
+COPY OpenPepXL.py /app/OpenPepXL.py 
 COPY src/ /app/src
 COPY assets/ /app/assets
 COPY example-data/ /app/example-data
@@ -56,4 +56,4 @@ COPY pages/ /app/pages
 # make sure that conda environment is used
 SHELL ["conda", "run", "-n", "streamlit-env", "/bin/bash", "-c"]
 EXPOSE $PORT
-ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "streamlit-env", "streamlit", "run", "app.py"]
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "streamlit-env", "streamlit", "run", "OpenPepXL.py"]

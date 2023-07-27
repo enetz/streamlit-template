@@ -137,6 +137,10 @@ def page_setup(page: str = "") -> dict[str, Any]:
     st.session_state.workspace.mkdir(parents=True, exist_ok=True)
     Path(st.session_state.workspace,
          "mzML-files").mkdir(parents=True, exist_ok=True)
+    Path(st.session_state.workspace,
+         "fasta-files").mkdir(parents=True, exist_ok=True)
+    Path(st.session_state.workspace,
+         "idXML-files").mkdir(parents=True, exist_ok=True)
 
     # Load parameters from the parameter file
     params = load_params()
@@ -229,11 +233,17 @@ You can share this unique workspace ID with other people.
                         )
                         st.experimental_rerun()
 
-        # Workflow pages have mzML file selector, there can be multiple workflow pages which share mzML file selection
+        # Workflow pages have mzML and FASTA file selector, there can be multiple workflow pages which share file selection
         if page == "workflow":
             st.markdown("📁 **mzML files**")
             st.multiselect("mzML files",  options=[Path(f).stem for f in Path(st.session_state.workspace, "mzML-files").glob("*.mzML")],
                            default=params["selected-mzML-files"], key="selected-mzML-files", label_visibility="collapsed")
+            st.markdown("---")
+            
+        if page == "workflow":
+            st.markdown("📁 **FASTA files**")
+            st.multiselect("FASTA file",  options=[Path(f).stem for f in Path(st.session_state.workspace, "fasta-files").glob("*.fasta")],
+                           default=params["selected-fasta-file"], key="selected-fasta-file", label_visibility="collapsed", max_selections=1)
             st.markdown("---")
 
         # All pages have logo and settings
