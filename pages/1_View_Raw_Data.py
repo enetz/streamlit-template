@@ -33,7 +33,8 @@ if selected_file:
             if bpc_points:
                 ms1_rt = bpc_points[0]["x"]
             else:
-                ms1_rt = df_MS1.loc[0, "RT"]
+                # use first RT value (the first row's label might not be 0, therefore iloc)
+                ms1_rt = df_MS1.iloc[0,:].loc["RT"]
 
             spec = df_MS1.loc[df_MS1["RT"] == ms1_rt].squeeze()
 

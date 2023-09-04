@@ -8,6 +8,11 @@ from src.fileupload import *
 
 params = page_setup()
 
+# Specify mzML file location in workspace (needed here to refresh between switching workspaces)
+mzML_dir: Path = Path(st.session_state.workspace, "mzML-files")
+fasta_dir: Path = Path(st.session_state.workspace, "fasta-files")
+idXML_dir: Path = Path(st.session_state.workspace, "idXML-files")
+
 # Make sure "selected-mzML-files" is in session state
 if "selected-mzML-files" not in st.session_state:
     st.session_state["selected-mzML-files"] = params["selected-mzML-files"]

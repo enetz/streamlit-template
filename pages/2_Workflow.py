@@ -1,9 +1,11 @@
 
 import streamlit as st
-import sys
+import subprocess
+import threading
 
 from src.common import *
 from src.workflow import *
+
 
 
 # Page name "workflow" will show mzML file selector in sidebar
@@ -27,6 +29,10 @@ st.title("Workflow")
 #output_file = st.text_input(label="output file", key="output-file")
 
 cols = st.columns(5)
+
+# TODO: Add selectbox for file inputs, instead of left border stuff
+#params["selected-mzML-files"] = 
+#params["selected-fasta-file"]
 
 params["decoy-string"] = cols[0].text_input(label="Decoy identifier string", value=params["decoy-string"], key="decoy-string")
 params["decoy-pos"] = cols[1].selectbox(label="Decoy string position", options=("prefix", "suffix"), index=0, key="decoy-pos")

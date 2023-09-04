@@ -177,6 +177,9 @@ def render_sidebar(params: dict[str, Any], page: str = "") -> None:
             workspaces_dir = Path("..", "workspaces-"+REPOSITORY_NAME)
             # Online: show current workspace name in info text and option to change to other existing workspace
             if st.session_state.location == "online":
+                # online, but not using docker, the workspaces are inside the repo
+                if not "docker" in sys.argv:
+                    workspaces_dir = Path("workspaces-"+REPOSITORY_NAME)
                 # Change workspace...
                 new_workspace = st.text_input("enter workspace", "")
                 if st.button("**Enter Workspace**") and new_workspace:
